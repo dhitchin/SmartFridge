@@ -28,7 +28,6 @@ public class AddItemDialog extends JDialog {
 	private JSpinner itemAmount;
 	private String name = "";
 	private Date date = new Date();
-	private double amount = 0.0;
 	private SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
 	JButton btnReset, btnCancel, btnSubmit;
 	
@@ -46,8 +45,8 @@ public class AddItemDialog extends JDialog {
 		return (Date)expirationDate.getValue();
 	}
 	
-	public double getAmount(){
-		return (double)itemAmount.getValue();
+	public int getAmount(){
+		return (int)itemAmount.getValue();
 	}
 	
 	public void addController(AddItemController controller){
@@ -82,7 +81,7 @@ public class AddItemDialog extends JDialog {
 		JLabel lblExpirationDate = new JLabel("Expiration Date:");
 		
 		itemAmount = new JSpinner();
-		itemAmount.setModel(new SpinnerNumberModel(amount, 0.0, null, 0.2));
+		itemAmount.setModel(new SpinnerNumberModel(new Integer(0), null, null, new Integer(1)));
 		
 		btnSubmit = new JButton("Submit");
 		

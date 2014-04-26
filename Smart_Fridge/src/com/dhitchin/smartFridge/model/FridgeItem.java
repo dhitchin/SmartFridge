@@ -7,8 +7,8 @@ import java.util.Date;
 public class FridgeItem {
 	private String name = null;
 	private Date expDate = new Date();
-	private double currAmnt = 0.0;
-	private double threshold = 0.0;
+	private int currAmnt = 0;
+	private int threshold = 0;
 	
 	public boolean isUnderThreshold(){
 		return currAmnt < threshold;
@@ -18,7 +18,7 @@ public class FridgeItem {
 		super();
 	}
 	
-	public FridgeItem(String name, Date expDate, double currAmnt){
+	public FridgeItem(String name, Date expDate, int currAmnt){
 		this.name = name;
 		this.expDate = expDate;
 		this.currAmnt = currAmnt;
@@ -45,19 +45,19 @@ public class FridgeItem {
 		this.expDate = expDate;
 	}
 
-	public double getCurrAmnt() {
+	public int getCurrAmnt() {
 		return currAmnt;
 	}
 
-	public void setCurrAmnt(double currAmnt) {
+	public void setCurrAmnt(int currAmnt) {
 		this.currAmnt = currAmnt;
 	}
 
-	public double getThreshold() {
+	public int getThreshold() {
 		return threshold;
 	}
 
-	public void setThreshold(double threshold) {
+	public void setThreshold(int threshold) {
 		this.threshold = threshold;
 	}
 

@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
 
 import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
@@ -15,7 +16,7 @@ import com.dhitchin.smartFridge.view.AddItemDialog;
 import com.dhitchin.smartFridge.view.Disp;
 import com.dhitchin.smartFridge.view.Login;
 
-public class FridgeController implements ActionListener, ListSelectionListener {
+public class FridgeController implements ActionListener, ListSelectionListener, WindowFocusListener {
 
 	Fridge fridgeModel;
 	Disp fridgeView;
@@ -35,11 +36,7 @@ public class FridgeController implements ActionListener, ListSelectionListener {
 	public void actionPerformed(ActionEvent ae){
 		addView = new AddItemDialog(fridgeView.getFrame());
 		addController = new AddItemController();
-		if(ae.getActionCommand() == "Update Item" || ae.getActionCommand() == "Add New Item"){
-			if(ae.getActionCommand() == "Update Item"){
-				addController.updateItem(selectedItem);
-				addView.setTextFields(selectedItem.getName(), selectedItem.getExpDate(), selectedItem.getCurrAmnt());
-			}
+		if(ae.getActionCommand() == "Add New Item"){
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run(){
@@ -50,10 +47,7 @@ public class FridgeController implements ActionListener, ListSelectionListener {
 					addView.addWindowListener(new WindowAdapter() {
 						@Override
 						public void windowClosed(WindowEvent e){
-							if(selectedItem != null){
-								fridgeView.updateSelectedItem(selectedItem.getName(), selectedItem.getExpDateString(), selectedItem.getCurrAmnt(), selectedItem.getThreshold());
-								fridgeModel.updateLowItems();
-							}
+							fridgeModel.updateLowItems();
 						}
 					});
 					
@@ -80,7 +74,7 @@ public class FridgeController implements ActionListener, ListSelectionListener {
 		loginView = new Login(fridgeView.getFrame());
 	}
 	
-	public void startApplication(){
+	public void startApplication(){		
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run(){
@@ -91,5 +85,20 @@ public class FridgeController implements ActionListener, ListSelectionListener {
 				loginView.setVisible(true);
 			}
 		});
+	}
+
+	@Override
+	public void windowGainedFocus(WindowEvent e) {
+		if(fridgeModel.hasLowItems()) fridgeView.setLowItemWarning();
+		else fridgeView.clearLowItemWarning();
+		
+		selectedItem = fridgeModel.getItemWithName(fridgeView.getSelectedItem());
+		if(selectedItem != null)
+			fridgeView.updateSelectedItem(selectedItem.getName(), selectedItem.getExpDateString(), selectedItem.getCurrAmnt(), selectedItem.getThreshold());
+	}
+
+	@Override
+	public void windowLostFocus(WindowEvent e) {
+		//do nothing
 	}
 }
