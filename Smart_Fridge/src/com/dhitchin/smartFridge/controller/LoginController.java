@@ -5,15 +5,28 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
+import com.dhitchin.smartFridge.model.Fridge;
 import com.dhitchin.smartFridge.view.Login;
 
 public class LoginController extends KeyAdapter implements ActionListener {
 	private String passcode;
+	private String adminPasscode;
 	private boolean isCorrect = false;
+	private boolean isAdmin = false;
 	Login login;
+	Fridge theFridge;
 	
-	public LoginController(String pc){
+	public boolean isAdmin(){
+		return isAdmin;
+	}
+	
+	public void setFridge(Fridge f){
+		theFridge = f;
+	}
+	
+	public LoginController(String pc, String adminPc){
 		passcode = pc;
+		adminPasscode = adminPc;
 	}
 	
 	public void setView(Login l){
@@ -27,6 +40,11 @@ public class LoginController extends KeyAdapter implements ActionListener {
 	private void checkPasscode(){
 		String enteredPasscode = login.getPasscode();
 		isCorrect = enteredPasscode.equals(passcode);
+		isAdmin = enteredPasscode.equals(adminPasscode);
+		if(isAdmin){
+			theFridge.setAdmin(true);
+			isCorrect = true;
+		}
 		if(isCorrect){
 			login.startProgram();
 		} else {

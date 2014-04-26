@@ -50,7 +50,10 @@ public class FridgeController implements ActionListener, ListSelectionListener {
 					addView.addWindowListener(new WindowAdapter() {
 						@Override
 						public void windowClosed(WindowEvent e){
-							if(selectedItem != null) fridgeView.updateSelectedItem(selectedItem.getName(), selectedItem.getExpDateString(), selectedItem.getCurrAmnt(), selectedItem.getThreshold());
+							if(selectedItem != null){
+								fridgeView.updateSelectedItem(selectedItem.getName(), selectedItem.getExpDateString(), selectedItem.getCurrAmnt(), selectedItem.getThreshold());
+								fridgeModel.updateLowItems();
+							}
 						}
 					});
 					
@@ -69,7 +72,7 @@ public class FridgeController implements ActionListener, ListSelectionListener {
 	
 	public void setModel(Fridge f){
 		this.fridgeModel = f;
-		login = new LoginController(""+fridgeModel.getUserPasscode());
+		login = new LoginController(""+fridgeModel.getUserPasscode(), ""+fridgeModel.getAdminPasscode());
 	}
 	
 	public void setView(Disp d){
@@ -82,6 +85,7 @@ public class FridgeController implements ActionListener, ListSelectionListener {
 			@Override
 			public void run(){
 				login.setView(loginView);
+				login.setFridge(fridgeModel);
 				loginView.addController(login);
 				fridgeView.getFrame().setVisible(false);
 				loginView.setVisible(true);

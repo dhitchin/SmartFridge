@@ -5,6 +5,13 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
+import java.awt.event.WindowListener;
+import java.awt.event.WindowStateListener;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -27,6 +34,8 @@ import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
 import com.dhitchin.smartFridge.controller.FridgeController;
+import com.dhitchin.smartFridge.model.Fridge;
+import javax.swing.JTextField;
 
 public class Disp implements Observer{
 	private JFrame frmSmartfridge;
@@ -36,9 +45,15 @@ public class Disp implements Observer{
 	JLabel lblCurrName;
 	JButton btnUpdateItem, btnEmailShoppingList, btnDisplayShoppingList, btnAddNewItem;
 	JList<String> itemList;
+	Fridge myFridge;
+	private JTextField txtLowItemWarning;
 	
 	public JFrame getFrame(){
 		return frmSmartfridge;
+	}
+	
+	public void addFridge(Fridge f){
+		myFridge = f;
 	}
 	
 	public String getSelectedItem(){
@@ -79,6 +94,12 @@ public class Disp implements Observer{
 		btnDisplayShoppingList = new JButton("Display Shopping List");
 		
 		btnAddNewItem = new JButton("Add New Item");
+		
+		txtLowItemWarning = new JTextField();
+		txtLowItemWarning.setHorizontalAlignment(SwingConstants.CENTER);
+		txtLowItemWarning.setEditable(false);
+		txtLowItemWarning.setText("No Low Items");
+		txtLowItemWarning.setColumns(10);
 		GroupLayout groupLayout = new GroupLayout(frmSmartfridge.getContentPane());
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -88,23 +109,26 @@ public class Disp implements Observer{
 						.addComponent(lblItemList, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 						.addComponent(itemList, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE))
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(panelSelectedItem, GroupLayout.DEFAULT_SIZE, 149, Short.MAX_VALUE)
-						.addComponent(btnDisplayShoppingList, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE)
-						.addComponent(btnEmailShoppingList, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(btnAddNewItem, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE)
-						.addComponent(btnUpdateItem, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE))
+					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+						.addComponent(panelSelectedItem, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE)
+						.addComponent(btnDisplayShoppingList, GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE)
+						.addComponent(btnEmailShoppingList, GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE)
+						.addComponent(btnAddNewItem, GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE)
+						.addComponent(btnUpdateItem, GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE)
+						.addComponent(txtLowItemWarning, GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE))
 					.addContainerGap())
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
 					.addContainerGap()
-					.addComponent(lblItemList)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblItemList)
+						.addComponent(txtLowItemWarning, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
 						.addComponent(itemList, GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
-						.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
+						.addGroup(groupLayout.createSequentialGroup()
 							.addComponent(panelSelectedItem, GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE)
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(btnUpdateItem)
@@ -157,7 +181,7 @@ public class Disp implements Observer{
 		JMenu mnFile = new JMenu("File");
 		menuBar.add(mnFile);
 		
-		JMenuItem mntmAdminOptions = new JMenuItem("Admin Options");
+		final JMenuItem mntmAdminOptions = new JMenuItem("Admin Options");
 		mnFile.add(mntmAdminOptions);
 		
 		JMenuItem mntmExit = new JMenuItem("Exit");
@@ -169,6 +193,13 @@ public class Disp implements Observer{
 			}
 			
 		});
+		
+		frmSmartfridge.addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentShown(ComponentEvent e){
+				mntmAdminOptions.setEnabled(myFridge.isAdmin());
+			}
+		});
 	}
 	
 	public void updateSelectedItem(String name, String expDate, double amount, double threshold){
@@ -179,7 +210,8 @@ public class Disp implements Observer{
 	}
 	
 	public void update(Observable obs, Object obj){
-		if(obj instanceof String[]) itemList.setListData((String[])obj);
+		if(obj instanceof String[])
+			itemList.setListData((String[])obj);
 	}
 	
 	public void addController(FridgeController controller){

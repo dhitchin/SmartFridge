@@ -15,7 +15,8 @@ public class SmartFridge {
 		FridgeController fridgeControl = new FridgeController();
 		fridgeControl.setModel(myFridge);
 		fridgeControl.setView(myView);
-		
+
+		myView.addFridge(myFridge);
 		myView.addController(fridgeControl);
 		
 		fridgeControl.startApplication();

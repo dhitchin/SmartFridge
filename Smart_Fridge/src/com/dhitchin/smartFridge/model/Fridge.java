@@ -7,6 +7,8 @@ public class Fridge extends java.util.Observable{
 	private ArrayList<FridgeItem> items = new ArrayList<FridgeItem>();
 	private int userPasscode = 1234;
 	private int adminPasscode = 9999;
+	private boolean isAdmin = false;
+	private ArrayList<String> lowItems = new ArrayList<String>();
 	
 	public Fridge(){
 		super();
@@ -15,6 +17,27 @@ public class Fridge extends java.util.Observable{
 	public void sendUpdatedList(){
 		setChanged();
 		notifyObservers(this.getItemNames());
+	}
+	
+	public void setAdmin(boolean admin){
+		isAdmin = admin;
+		setChanged();
+		notifyObservers();
+	}
+	
+	public String[] getItemsBelowThreshold(){
+		return (String[])lowItems.toArray();
+	}
+	
+	public void updateLowItems(){
+		lowItems.clear();
+		for(FridgeItem fi : items){
+			if(fi.isUnderThreshold()) lowItems.add(fi.getName()); 
+		}
+	}
+	
+	public boolean hasLowItems(){
+		return !lowItems.isEmpty();
 	}
 	
 	public void addItem(FridgeItem item){
@@ -62,5 +85,9 @@ public class Fridge extends java.util.Observable{
 
 	public void setAdminPasscode(int adminPasscode) {
 		this.adminPasscode = adminPasscode;
+	}
+
+	public boolean isAdmin() {
+		return isAdmin;
 	}
 }
