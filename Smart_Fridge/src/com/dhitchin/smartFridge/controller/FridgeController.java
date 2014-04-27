@@ -15,6 +15,7 @@ import com.dhitchin.smartFridge.model.FridgeItem;
 import com.dhitchin.smartFridge.view.AddItemDialog;
 import com.dhitchin.smartFridge.view.Disp;
 import com.dhitchin.smartFridge.view.Login;
+import com.dhitchin.smartFridge.view.SetThresholdDialog;
 
 public class FridgeController implements ActionListener, ListSelectionListener, WindowFocusListener {
 
@@ -25,7 +26,7 @@ public class FridgeController implements ActionListener, ListSelectionListener, 
 	AddItemDialog addView;
 	AddItemController addController;
 	
-	private FridgeItem selectedItem = new FridgeItem();
+	private FridgeItem selectedItem;
 	
 	
 	public FridgeController(){
@@ -53,7 +54,21 @@ public class FridgeController implements ActionListener, ListSelectionListener, 
 					
 					addView.setVisible(true);
 				}
-			});			
+			});
+		}
+		if(ae.getActionCommand() == "Display Shopping List"){
+			//Make a window of list of low items
+		}
+		if(ae.getActionCommand() == "Add"){
+			//
+		}
+		if(ae.getActionCommand() == "Remove"){
+			selectedItem.setCurrAmnt(selectedItem.getCurrAmnt()-1);
+			
+		}
+		if(ae.getActionCommand() == "Change Threshold"){
+			SetThresholdDialog std = new SetThresholdDialog(selectedItem);
+			std.setVisible(true);
 		}
 	}
 	
