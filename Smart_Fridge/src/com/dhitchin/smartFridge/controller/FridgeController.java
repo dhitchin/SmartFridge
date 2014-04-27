@@ -35,6 +35,7 @@ public class FridgeController implements ActionListener, ListSelectionListener, 
 	
 	@Override
 	public void actionPerformed(ActionEvent ae){
+		System.out.println(ae.getActionCommand());
 		addView = new AddItemDialog(fridgeView.getFrame());
 		addController = new AddItemController();
 		if(ae.getActionCommand() == "Add New Item"){
@@ -63,8 +64,16 @@ public class FridgeController implements ActionListener, ListSelectionListener, 
 			//
 		}
 		if(ae.getActionCommand() == "Remove"){
-			selectedItem.setCurrAmnt(selectedItem.getCurrAmnt()-1);
-			
+			selectedItem = fridgeModel.getItemWithName(fridgeView.getSelectedItem());
+			if(selectedItem != null){
+				int newAmnt = selectedItem.getCurrAmnt() - 1;
+				selectedItem.setCurrAmnt(newAmnt);
+				fridgeView.updateSelectedItem(selectedItem.getName(), selectedItem.getExpDateString(), selectedItem.getCurrAmnt(), selectedItem.getThreshold());
+				if(selectedItem.isUnderThreshold()){
+					fridgeView.setLowItemWarning();
+				}
+			}
+			System.out.println(selectedItem);
 		}
 		if(ae.getActionCommand() == "Change Threshold"){
 			SetThresholdDialog std = new SetThresholdDialog(selectedItem);
@@ -106,6 +115,8 @@ public class FridgeController implements ActionListener, ListSelectionListener, 
 	public void windowGainedFocus(WindowEvent e) {
 		if(fridgeModel.hasLowItems()) fridgeView.setLowItemWarning();
 		else fridgeView.clearLowItemWarning();
+		
+		fridgeView.update(fridgeModel, fridgeModel.getItemNames());
 		
 		selectedItem = fridgeModel.getItemWithName(fridgeView.getSelectedItem());
 		if(selectedItem != null)

@@ -252,6 +252,8 @@ public class Disp implements Observer{
 	}
 	
 	public void addController(FridgeController controller){
+		btnIncrement.addActionListener(controller);
+		btnDecrement.addActionListener(controller);
 		btnAddNewItem.addActionListener(controller);
 		btnDisplayShoppingList.addActionListener(controller);
 		btnChangeThreshold.addActionListener(controller);

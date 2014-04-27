@@ -90,8 +90,12 @@ public class AdminOptionDialog extends JDialog {
 					
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						if(userPasscode.getText().matches("^([0-9]{0,5})")) theFridge.setUserPasscode(Integer.parseInt(userPasscode.getText()));
-						if(adminPasscode.getText().matches("^([0-9]{0,5})")) theFridge.setAdminPasscode(Integer.parseInt(adminPasscode.getText()));
+						if(!userPasscode.getText().equals("")){
+							if(userPasscode.getText().matches("^([0-9]{0,5})")) theFridge.setUserPasscode(Integer.parseInt(userPasscode.getText()));
+						}
+						if(!adminPasscode.getText().equals("")){	
+							if(adminPasscode.getText().matches("^([0-9]{0,5})")) theFridge.setAdminPasscode(Integer.parseInt(adminPasscode.getText()));
+						}
 						closeDialog();
 					}
 				});

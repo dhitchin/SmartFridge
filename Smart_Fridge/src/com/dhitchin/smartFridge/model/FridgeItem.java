@@ -1,10 +1,11 @@
 package com.dhitchin.smartFridge.model;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
-public class FridgeItem {
+public class FridgeItem implements Serializable{
+	private static final long serialVersionUID = 5525457742529408067L;
 	private String name = null;
 	private Date expDate = new Date();
 	private int currAmnt = 0;

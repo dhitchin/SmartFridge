@@ -1,9 +1,11 @@
 package com.dhitchin.smartFridge.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Fridge extends java.util.Observable{
+public class Fridge extends java.util.Observable implements Serializable{
+	private static final long serialVersionUID = -3844646893552778913L;
 	private ArrayList<FridgeItem> items = new ArrayList<FridgeItem>();
 	private int userPasscode = 1234;
 	private int adminPasscode = 9999;
@@ -90,4 +92,19 @@ public class Fridge extends java.util.Observable{
 	public boolean isAdmin() {
 		return isAdmin;
 	}
+	
+	@Override
+	public String toString() {
+ 	   return new StringBuffer(" items : ")
+ 	   .append(this.items)
+ 	   .append(" userPasscode : ")
+ 	   .append(this.userPasscode)
+ 	   .append(" adminPasscode : ")
+ 	   .append(this.adminPasscode)
+ 	   .append(" isAdmin : ")
+ 	   .append(this.isAdmin)
+ 	   .append(" lowItems : ")
+ 	   .append(this.lowItems)
+ 	   .toString();
+	   }
 }
