@@ -11,21 +11,13 @@ import com.dhitchin.smartFridge.model.Fridge;
 import com.dhitchin.smartFridge.view.Disp;
 
 public class SmartFridge {
-		static Fridge myFridge;
+	static Fridge myFridge;	
+	final static String FRIDGE_FILE = "fridge.dat";
 		
-	
 	public static void main(String[] args) {
 		Disp myView = new Disp();
 		
-		try{
-			FileInputStream fin = new FileInputStream("fridge.dat");
-			ObjectInputStream ois = new ObjectInputStream(fin);
-			myFridge = (Fridge)ois.readObject();
-			ois.close();
-		}catch(IOException | ClassNotFoundException ioe){
-			System.err.println(ioe);
-			myFridge = new Fridge();
-		}
+		readFridge();
 		
 		myFridge.addObserver(myView);
 		
@@ -46,12 +38,24 @@ public class SmartFridge {
 	
 	private static void writeFridge(){
 		try{
-			FileOutputStream fout = new FileOutputStream("fridge.dat");
+			FileOutputStream fout = new FileOutputStream(FRIDGE_FILE);
 			ObjectOutputStream oos = new ObjectOutputStream(fout);
 			oos.writeObject(myFridge);
 			oos.close();
 		} catch (IOException ioe){
 			System.err.print(ioe);
+		}
+	}
+	
+	private static void readFridge(){
+		try{
+			FileInputStream fin = new FileInputStream(FRIDGE_FILE);
+			ObjectInputStream ois = new ObjectInputStream(fin);
+			myFridge = (Fridge)ois.readObject();
+			ois.close();
+		}catch(IOException | ClassNotFoundException ioe){
+			System.err.println(ioe);
+			myFridge = new Fridge();
 		}
 	}
 }
