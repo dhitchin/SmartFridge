@@ -15,6 +15,7 @@ import com.dhitchin.smartFridge.model.FridgeItem;
 import com.dhitchin.smartFridge.view.AddItemDialog;
 import com.dhitchin.smartFridge.view.Disp;
 import com.dhitchin.smartFridge.view.Login;
+import com.dhitchin.smartFridge.view.LowItemsView;
 import com.dhitchin.smartFridge.view.SetThresholdDialog;
 
 public class FridgeController implements ActionListener, ListSelectionListener, WindowFocusListener {
@@ -58,22 +59,37 @@ public class FridgeController implements ActionListener, ListSelectionListener, 
 			});
 		}
 		if(ae.getActionCommand() == "Display Shopping List"){
-			//Make a window of list of low items
+			fridgeModel.updateLowItems();
+			LowItemsView liv = new LowItemsView(fridgeModel.getItemsBelowThreshold());
+			liv.setVisible(true);
 		}
 		if(ae.getActionCommand() == "Add"){
-			//
+			selectedItem = fridgeModel.getItemWithName(fridgeView.getSelectedItem());
+			if(selectedItem != null){
+				int newAmnt = selectedItem.getCurrAmnt() + 1;
+					selectedItem.setCurrAmnt(newAmnt);
+					fridgeView.updateSelectedItem(selectedItem.getName(), selectedItem.getExpDateString(), selectedItem.getCurrAmnt(), selectedItem.getThreshold());
+				fridgeModel.updateLowItems();
+				if(fridgeModel.hasLowItems()){
+					fridgeView.setLowItemWarning();
+				} else fridgeView.clearLowItemWarning();
+			}
 		}
 		if(ae.getActionCommand() == "Remove"){
 			selectedItem = fridgeModel.getItemWithName(fridgeView.getSelectedItem());
 			if(selectedItem != null){
 				int newAmnt = selectedItem.getCurrAmnt() - 1;
-				selectedItem.setCurrAmnt(newAmnt);
-				fridgeView.updateSelectedItem(selectedItem.getName(), selectedItem.getExpDateString(), selectedItem.getCurrAmnt(), selectedItem.getThreshold());
-				if(selectedItem.isUnderThreshold()){
-					fridgeView.setLowItemWarning();
+				if(newAmnt >= 0) {
+					selectedItem.setCurrAmnt(newAmnt);
+					fridgeView.updateSelectedItem(selectedItem.getName(), selectedItem.getExpDateString(), selectedItem.getCurrAmnt(), selectedItem.getThreshold());
+				} else {
+					fridgeModel.deleteItem(selectedItem);
 				}
+				fridgeModel.updateLowItems();
+				if(fridgeModel.hasLowItems()){
+					fridgeView.setLowItemWarning();
+				} else fridgeView.clearLowItemWarning();
 			}
-			System.out.println(selectedItem);
 		}
 		if(ae.getActionCommand() == "Change Threshold"){
 			SetThresholdDialog std = new SetThresholdDialog(selectedItem);

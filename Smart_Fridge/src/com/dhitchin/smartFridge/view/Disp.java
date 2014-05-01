@@ -107,16 +107,9 @@ public class Disp implements Observer{
 		txtLowItemWarning.setColumns(10);
 		
 		btnIncrement = new JButton("Add");
-		btnIncrement.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-			}
-		});
-		
+				
 		btnDecrement = new JButton("Remove");
-		btnDecrement.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
+		
 		GroupLayout groupLayout = new GroupLayout(frmSmartfridge.getContentPane());
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)

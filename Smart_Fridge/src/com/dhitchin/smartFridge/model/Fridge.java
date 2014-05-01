@@ -28,7 +28,8 @@ public class Fridge extends java.util.Observable implements Serializable{
 	}
 	
 	public String[] getItemsBelowThreshold(){
-		return (String[])lowItems.toArray();
+		String retArray[] = new String[lowItems.size()]; 
+		return lowItems.toArray(retArray);
 	}
 	
 	public void updateLowItems(){
@@ -43,8 +44,12 @@ public class Fridge extends java.util.Observable implements Serializable{
 	}
 	
 	public void addItem(FridgeItem item){
-		if(items.contains(item)) items.remove(item);
 		items.add(item);
+		sendUpdatedList();
+	}
+	
+	public void deleteItem(FridgeItem item){
+		if(items.contains(item)) items.remove(item);
 		sendUpdatedList();
 	}
 	
