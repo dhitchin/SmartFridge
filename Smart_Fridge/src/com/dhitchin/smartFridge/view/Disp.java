@@ -7,6 +7,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -26,6 +28,7 @@ import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
@@ -110,39 +113,52 @@ public class Disp implements Observer{
 				
 		btnDecrement = new JButton("Remove");
 		
+		JPanel panel = new JPanel();
+		final JLabel lblCurrentTime = new JLabel("Current Time:");
+		panel.add(lblCurrentTime);
+		Timer timer = new Timer(1000, new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent ae){
+				Date now = new Date();
+				String time = DateFormat.getDateTimeInstance().format(now);
+				lblCurrentTime.setText(time);
+			}
+		});
+		timer.start();
+		
 		GroupLayout groupLayout = new GroupLayout(frmSmartfridge.getContentPane());
 		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
+			groupLayout.createParallelGroup(Alignment.TRAILING)
 				.addGroup(groupLayout.createSequentialGroup()
 					.addContainerGap()
-					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
-						.addComponent(lblItemList, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(itemList, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE))
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(itemList, GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE)
+						.addComponent(lblItemList, GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE))
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(panelSelectedItem, GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE)
-						.addComponent(btnDisplayShoppingList, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE)
-						.addComponent(btnChangeThreshold, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE)
-						.addComponent(btnAddNewItem, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE)
-						.addComponent(txtLowItemWarning, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE)
+						.addComponent(panel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 210, Short.MAX_VALUE)
+						.addComponent(btnDisplayShoppingList, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 210, Short.MAX_VALUE)
+						.addComponent(btnAddNewItem, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 210, Short.MAX_VALUE)
 						.addGroup(groupLayout.createSequentialGroup()
 							.addComponent(btnIncrement, GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(btnDecrement, GroupLayout.DEFAULT_SIZE, 99, Short.MAX_VALUE)))
+							.addComponent(btnDecrement, GroupLayout.DEFAULT_SIZE, 105, Short.MAX_VALUE))
+						.addComponent(panelSelectedItem, GroupLayout.DEFAULT_SIZE, 210, Short.MAX_VALUE)
+						.addComponent(txtLowItemWarning, GroupLayout.DEFAULT_SIZE, 210, Short.MAX_VALUE)
+						.addComponent(btnChangeThreshold, GroupLayout.DEFAULT_SIZE, 210, Short.MAX_VALUE))
 					.addContainerGap())
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
 					.addContainerGap()
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblItemList)
-						.addComponent(txtLowItemWarning, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+						.addComponent(txtLowItemWarning, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblItemList))
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-						.addComponent(itemList, GroupLayout.DEFAULT_SIZE, 384, Short.MAX_VALUE)
 						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(panelSelectedItem, GroupLayout.DEFAULT_SIZE, 224, Short.MAX_VALUE)
+							.addComponent(panelSelectedItem, GroupLayout.DEFAULT_SIZE, 189, Short.MAX_VALUE)
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 								.addComponent(btnIncrement)
@@ -152,9 +168,10 @@ public class Disp implements Observer{
 							.addGap(18)
 							.addComponent(btnDisplayShoppingList)
 							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(btnChangeThreshold)
-							.addGap(6)))
-					.addContainerGap())
+							.addComponent(btnChangeThreshold))
+						.addComponent(itemList, GroupLayout.DEFAULT_SIZE, 351, Short.MAX_VALUE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(panel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 		);
 		
 		panelSelectedItem.setLayout(new BoxLayout(panelSelectedItem, BoxLayout.Y_AXIS));

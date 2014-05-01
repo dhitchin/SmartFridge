@@ -1,10 +1,12 @@
 package com.dhitchin.smartFridge.view;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
@@ -30,6 +32,7 @@ public class LowItemsView extends JDialog {
 			textArea.setColumns(20);
 			textArea.setRows(25);
 			textArea.setEditable(false);
+			textArea.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 			contentPanel.add(textArea);
 			for(String s : lowItems){
 				itemText = itemText + s + "\n";

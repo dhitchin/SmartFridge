@@ -88,7 +88,7 @@ public class SetThresholdDialog extends JDialog {
 			} else{
 				try{
 					int newVal = Integer.parseInt(newThreshold.getText());
-					currItem.setThreshold(newVal);
+					if(newVal > -1) currItem.setThreshold(newVal);
 					closeDialog();
 				}catch(NumberFormatException nfe){
 					JOptionPane.showMessageDialog(null, "The value must be an integer!");
